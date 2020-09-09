@@ -1,0 +1,94 @@
+<!doctype html>
+
+<head>
+    <title>My Game</title>
+</head>
+
+<body>
+    <canvas id="gameCanvas" width="400" , height="400"></canvas>
+    <script>
+        var canvas, canvasContext;
+
+        window.onload = function() {
+            canvas = document.getElementById('gameCanvas');
+            canvasContext = canvas.getContext('2d');
+
+            document.addEventListener('keydown', keyPressed);
+            document.addEventListener('keyup', keyReleased);
+
+            setInterval(mainloop, 1000 / 50);
+
+        }
+        //player vars
+        const PLAYER_SIZE = 20;
+        var playerXpos = 200 - PLAYER_SIZE;
+        var playerYpos = 400 - PLAYER_SIZE;
+        var playerXspeed = 5;
+        var playerYspeed = 5;
+       
+
+        //enemy vars
+        const ENEMY_SIZE = 20;
+        var enemyXpos = 200 - ENEMY_SIZE;
+        var enemyYpos = 200 - ENEMY_SIZE;
+        var enemyXspeed = 5;
+        var enemyYspeed = 5;
+
+        //key presses
+        var spaceKeyPress = false;
+        var leftKeyPress = false;
+        var rightKeyPress = false;
+        var upKeyPress = false;
+        var downKeyPress = false;
+
+        const SPACE_KEY = 32;
+        const LEFT_KEY = 37;
+        const RIGHT_KEY = 39;
+        const UP_KEY = 38;
+        const DOWN_KEY = 40;
+       
+
+
+        // all functions must be run through mainloop to work
+        function mainloop() {
+            colorRect(0, 0, canvas.width, canvas.height, 'black'); //canvas
+            colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'blue'); // player
+            colorRect(enemyXpos, enemyYpos, ENEMY_SIZE, ENEMY_SIZE, 'red'); // enemy
+
+            playerMove();
+        } //  end of func
+
+        function keyPressed(evt) { // keydown 
+            console.log(evt.keyCode);
+        }
+
+        function keyReleased(evt) { // keyup
+
+        }
+
+
+        function playerMove() {
+            // x move 
+            playerYpos += playerYspeed; // y move
+
+
+            if (playerYpos + PLAYER_SIZE > canvas.height) { // top edge bounce
+                playerYspeed *= -1;
+
+            }
+
+            if (playerYpos < 0) { // bottom edge bounce
+                playerYspeed *= -1;
+
+            }
+
+        }
+
+        function colorRect(x, y, w, h, c) { //draws images
+            canvasContext.fillStyle = c;
+            canvasContext.fillRect(x, y, w, h);
+
+        } // end of func
+
+    </script>
+</body>
