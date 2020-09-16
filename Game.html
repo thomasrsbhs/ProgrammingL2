@@ -59,28 +59,67 @@
         } //  end of func
 
         function keyPressed(evt) { // keydown 
-            console.log(evt.keyCode);
+            if(evt.keyCode == SPACE_KEY){
+                spaceKeyPress = true;
+            }
+            if(evt.keyCode == RIGHT_KEY){
+                rightKeyPress = true;
+            }
+            if(evt.keyCode == LEFT_KEY){
+                leftKeyPress = true;
+//            console.log(leftKeyPress)
+            }
+            if(evt.keyCode == DOWN_KEY){
+                downKeyPress = true;
+            }
         }
 
         function keyReleased(evt) { // keyup
+            if(evt.keyCode == SPACE_KEY){
+                spaceKeyPress = false;
+            }
+            if(evt.keyCode == RIGHT_KEY){
+                rightKeyPress = false;
+            }
+            if(evt.keyCode == LEFT_KEY){
+                leftKeyPress = false;
+            }
+            if(evt.keyCode == DOWN_KEY){
+                downKeyPress = false;
+            }
 
         }
 
 
         function playerMove() {
-            // x move 
-            playerYpos += playerYspeed; // y move
-
-
-            if (playerYpos + PLAYER_SIZE > canvas.height) { // top edge bounce
-                playerYspeed *= -1;
-
+             
+            if(leftKeyPress){
+                playerXpos -= playerXspeed;
             }
-
-            if (playerYpos < 0) { // bottom edge bounce
-                playerYspeed *= -1;
-
+            
+            if(rightKeyPress){
+                playerXpos += playerXspeed;
             }
+            
+            if(spaceKeyPress){
+                playerYpos -= playerYspeed;
+            }
+            
+            if(downKeyPress){
+                playerYpos += playerYspeed;
+            }
+            
+            
+            
+//            if (playerYpos + PLAYER_SIZE > canvas.height) { // top edge bounce
+//                playerYspeed *= -1;
+//
+//            }
+//
+//            if (playerYpos < 0) { // bottom edge bounce
+//                playerYspeed *= -1;
+//
+//            }
 
         }
 
