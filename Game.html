@@ -93,12 +93,15 @@
 
         function playerMove() {
              
-            if(leftKeyPress){
+            if(leftKeyPress && playerXpos > 0){ //left move stop a canvas left edge
                 playerXpos -= playerXspeed;
             }
             
-            if(rightKeyPress){
+            if(rightKeyPress){ // right move
                 playerXpos += playerXspeed;
+                if(playerXpos > canvas.width){ // if out of canvas right side 
+                   playerXpos = 0 - PLAYER_SIZE / 2;
+                 }
             }
             
             if(spaceKeyPress){
@@ -108,19 +111,7 @@
             if(downKeyPress){
                 playerYpos += playerYspeed;
             }
-            
-            
-            
-//            if (playerYpos + PLAYER_SIZE > canvas.height) { // top edge bounce
-//                playerYspeed *= -1;
-//
-//            }
-//
-//            if (playerYpos < 0) { // bottom edge bounce
-//                playerYspeed *= -1;
-//
-//            }
-
+             
         }
 
         function colorRect(x, y, w, h, c) { //draws images
