@@ -25,7 +25,7 @@
         var playerYpos = 400 - PLAYER_SIZE;
         var playerXspeed = 5;
         var playerYspeed = 5;
-       
+
 
         //enemy vars
         const ENEMY_SIZE = 20;
@@ -46,7 +46,7 @@
         const RIGHT_KEY = 39;
         const UP_KEY = 38;
         const DOWN_KEY = 40;
-       
+
 
 
         // all functions must be run through mainloop to work
@@ -59,32 +59,32 @@
         } //  end of func
 
         function keyPressed(evt) { // keydown 
-            if(evt.keyCode == SPACE_KEY){
+            if (evt.keyCode == SPACE_KEY) {
                 spaceKeyPress = true;
             }
-            if(evt.keyCode == RIGHT_KEY){
+            if (evt.keyCode == RIGHT_KEY) {
                 rightKeyPress = true;
             }
-            if(evt.keyCode == LEFT_KEY){
+            if (evt.keyCode == LEFT_KEY) {
                 leftKeyPress = true;
-//            console.log(leftKeyPress)
+                //            console.log(leftKeyPress)
             }
-            if(evt.keyCode == DOWN_KEY){
+            if (evt.keyCode == DOWN_KEY) {
                 downKeyPress = true;
             }
         }
 
         function keyReleased(evt) { // keyup
-            if(evt.keyCode == SPACE_KEY){
+            if (evt.keyCode == SPACE_KEY) {
                 spaceKeyPress = false;
             }
-            if(evt.keyCode == RIGHT_KEY){
+            if (evt.keyCode == RIGHT_KEY) {
                 rightKeyPress = false;
             }
-            if(evt.keyCode == LEFT_KEY){
+            if (evt.keyCode == LEFT_KEY) {
                 leftKeyPress = false;
             }
-            if(evt.keyCode == DOWN_KEY){
+            if (evt.keyCode == DOWN_KEY) {
                 downKeyPress = false;
             }
 
@@ -92,26 +92,32 @@
 
 
         function playerMove() {
-             
-            if(leftKeyPress && playerXpos > 0){ //left move stop a canvas left edge
+
+            if (leftKeyPress && playerXpos > 0) { //left move left edge stop 
                 playerXpos -= playerXspeed;
             }
-            
-            if(rightKeyPress){ // right move
+
+            if (rightKeyPress && playerXpos < canvas.width - PLAYER_SIZE) { // right move
                 playerXpos += playerXspeed;
-                if(playerXpos > canvas.width){ // if out of canvas right side 
-                   playerXpos = 0 - PLAYER_SIZE / 2;
-                 }
+                if (playerXpos > canvas.width) { // right edge stop
+                    playerXpos += playerXspeed;
+                    
+                }
             }
-            
-            if(spaceKeyPress){
-                playerYpos -= playerYspeed;
+
+            if (spaceKeyPress && playerYpos > 0) { // up move 
+                playerYpos -= playerYspeed; // top edge stop 
             }
-            
-            if(downKeyPress){
-                playerYpos += playerYspeed;
+
+            if (downKeyPress && playerYpos < canvas.height - PLAYER_SIZE) { // down move
+                playerYpos += playerYspeed; // bottom edge stop
             }
-             
+
+        }
+
+
+        function enemyMove() {
+
         }
 
         function colorRect(x, y, w, h, c) { //draws images
