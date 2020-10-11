@@ -56,7 +56,38 @@
             colorRect(enemyXpos, enemyYpos, ENEMY_SIZE, ENEMY_SIZE, 'red'); // enemy
 
             playerMove();
+            enemyMove();
         } //  end of func
+        
+        function setup() { // setup func for all enemy objects 
+//            var enemyXposArray = Math.floor(Math.random() * ((canvas.width - ENEMY_SIZE) - 0));
+            var enemyYposArray = Math.floor(Math.random() * ((canvas.height - ENEMY_SIZE) - 0));
+            var enemyXspeedArray = Math.floor(Math.random() * (10-2) + 2);
+            
+            var enemy = {
+                enemyXposArray: enemyXposArray,
+                enemyYposArray: enemyYposArray,
+                enemyXspeedArray: enemyXspeedArray,
+                
+            }
+            enemies.push(ball);
+        } // end of func
+        
+         function drawEnemies() { // change all these to enemy
+            enemies.forEach(function(ball, i) {
+                colorRect(ball.ballXposArray, ball.ballYposArray, ball.ballSizeArray, ball.ballSizeArray, 'gold');
+
+            });
+
+        } // end func
+
+        
+        
+        
+        
+        
+        
+        
 
         function keyPressed(evt) { // keydown 
             if (evt.keyCode == SPACE_KEY) {
@@ -117,7 +148,31 @@
 
 
         function enemyMove() {
+            enemyXpos += enemyXspeed; // x move 
+//            enemyYpos += enemyYspeed; // y move 
+//            
+             if (enemyXpos + ENEMY_SIZE > canvas.width) { // right side bounce
+                enemyXspeed *= -1;
+                // enemyXspeed = enemyXspeed * -1;
 
+            }
+
+            if (enemyXpos < 0) { // left side bounce
+                enemyXspeed *= -1;
+
+            }
+
+//            if (enemyYpos + ENEMY_SIZE > canvas.height) { // top edge bounce
+//                enemyYspeed*= -1;
+//
+//            }
+//
+//            if (enemyYpos < 0) { // bottom edge bounce
+//                enemyYspeed*= -1;
+//
+//            }
+
+            
         }
 
         function colorRect(x, y, w, h, c) { //draws images
