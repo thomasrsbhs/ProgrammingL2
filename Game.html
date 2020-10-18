@@ -22,7 +22,7 @@
         //player vars
         const PLAYER_SIZE = 20;
         var playerXpos = 200 - PLAYER_SIZE;
-        var playerYpos = 400 - PLAYER_SIZE;
+        var playerYpos = 0;
         var playerXspeed = 5;
         var playerYspeed = 5;
 
@@ -76,8 +76,8 @@
         
         function setup() { // setup func for all enemy objects 
 //            var enemyXposArray = Math.floor(Math.random() * ((canvas.width - ENEMY_SIZE) - 0));
-            var enemyYposArray = Math.floor(Math.random() * ((canvas.height - ENEMY_SIZE) - 0));
-            var enemyXspeedArray = Math.floor(Math.random() * (10-2) + 2);
+            var enemyYposArray = Math.floor(Math.random() * ((canvas.height - ENEMY_SIZE) - 10));
+            var enemyXspeedArray = Math.floor(Math.random() * (14-2) + 2);
             
             var enemy = {
                 enemyXposArray: enemyXposArray,
@@ -140,9 +140,13 @@
 
         }
 
-
+        var yVel = 0.3; // gravity
+        var thrust = - 5; // gravity
         function playerMove() {
 
+            playerYpos += yVel;
+            yVel += .5;
+            
             if (leftKeyPress && playerXpos > 0) { //left move left edge stop 
                 playerXpos -= playerXspeed;
             }
@@ -156,13 +160,14 @@
                 }
             }
 
-            if (spaceKeyPress && playerYpos > 0) { // up move 
-                playerYpos -= playerYspeed; // top edge stop 
-            }
+            if (spaceKeyPress) { // up move and gravity
+                if(playerYpos > 0){
+                    yVel = thrust;
+                } else {
+                    yVel = 0;
+                }
+            } 
             
-            if (playerYpos > 0){ // gravity
-                playerYpos += playerYspeed;
-            }   
 
             if (downKeyPress && playerYpos < canvas.height - PLAYER_SIZE) { // down move
                 playerYpos += playerYspeed; // bottom edge stop
