@@ -28,7 +28,7 @@
 
 
         //enemy vars
-        const ENEMY_SIZE = 20;
+        const ENEMY_SIZE = 30;
         var enemyXpos = 200 - ENEMY_SIZE;
         var enemyYpos = 200 - ENEMY_SIZE;
         var enemyXspeed = 5;
@@ -140,12 +140,12 @@
 
         }
 
-        var yVel = 0.3; // gravity
-        var thrust = - 5; // gravity
+//        var yVel = 0.3; // gravity
+//        var thrust = - 5; // gravity
         function playerMove() {
 
-            playerYpos += yVel;
-            yVel += .5;
+//            playerYpos += yVel;
+//            yVel += .5;
             
             if (leftKeyPress && playerXpos > 0) { //left move left edge stop 
                 playerXpos -= playerXspeed;
@@ -159,13 +159,15 @@
                     
                 }
             }
-
-            if (spaceKeyPress) { // up move and gravity
-                if(playerYpos > 0){
-                    yVel = thrust;
-                } else {
-                    yVel = 0;
-                }
+            
+            
+            if (spaceKeyPress && playerYpos < canvas.height - PLAYER_SIZE) { // up move and gravity
+                playerYpos -= playerYspeed;
+//                if(playerYpos > 0){
+//                    yVel = thrust;
+//                } else {
+//                    yVel = 0;
+//                }
             } 
             
 
@@ -183,6 +185,10 @@
             if(enemyXpos + ENEMY_SIZE < 0){
                 enemyXpos = canvas.width; 
                 enemyYpos = Math.floor(Math.random() * canvas.height) - canvas.height * 0.2;
+            }
+            
+            if(enemyYpos +  ENEMY_SIZE > playerYpos && enemyYpos < playerYpos + PLAYER_SIZE && enemyXpos + ENEMY_SIZE > playerXpos){
+                console.log('hit');
             }
             
 //             if (enemyXpos + ENEMY_SIZE > canvas.width) { // right side bounce
