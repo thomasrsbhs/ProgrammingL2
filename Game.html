@@ -187,8 +187,9 @@
                 enemyYpos = Math.floor(Math.random() * canvas.height) - canvas.height * 0.2;
             }
             
-            if(enemyYpos +  ENEMY_SIZE > playerYpos && enemyYpos < playerYpos + PLAYER_SIZE && enemyXpos + ENEMY_SIZE > playerXpos){
-                console.log('hit');
+            if(enemyYpos +  ENEMY_SIZE > playerYpos && enemyYpos < playerYpos + PLAYER_SIZE && enemyXpos + ENEMY_SIZE > playerXpos && enemyXpos < playerXpos + PLAYER_SIZE){  // enemy collision
+                playerXpos = canvas.width/2 - PLAYER_SIZE;
+                playerYpos = 0;
             }
             
 //             if (enemyXpos + ENEMY_SIZE > canvas.width) { // right side bounce
