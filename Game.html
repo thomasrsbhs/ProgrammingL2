@@ -20,7 +20,7 @@
 
         }
         //player vars
-        const PLAYER_SIZE = 20;
+        const PLAYER_SIZE = 30;
         var playerXpos = 200 - PLAYER_SIZE;
         var playerYpos = 0;
         var playerXspeed = 5;
@@ -140,12 +140,12 @@
 
         }
 
-//        var yVel = 0.3; // gravity
-//        var thrust = - 5; // gravity
+        var yVel = 0.3; // gravity
+        var thrust = - 5; // gravity
         function playerMove() {
 
-//            playerYpos += yVel;
-//            yVel += .5;
+            playerYpos += yVel;
+            yVel += .5;
             
             if (leftKeyPress && playerXpos > 0) { //left move left edge stop 
                 playerXpos -= playerXspeed;
@@ -159,29 +159,32 @@
                     
                 }
             }
-            
+                        
             
             if (spaceKeyPress && playerYpos < canvas.height - PLAYER_SIZE) { // up move and gravity
                 playerYpos -= playerYspeed;
-//                if(playerYpos > 0){
-//                    yVel = thrust;
-//                } else {
-//                    yVel = 0;
-//                }
+                if(playerYpos > 0){
+                    yVel = thrust;
+                } else {
+                    yVel = 0;
+                }
             } 
             
-
-            if (downKeyPress && playerYpos < canvas.height - PLAYER_SIZE) { // down move
-                playerYpos += playerYspeed; // bottom edge stop
+            if(playerYpos > canvas.height){
+               playerYpos = 0 - PLAYER_SIZE;
+               playerXpos = canvas.width/2 - PLAYER_SIZE;
             }
+
+//            if (downKeyPress && playerYpos < canvas.height - PLAYER_SIZE) { // down move
+//                playerYpos += playerYspeed; // bottom edge stop
+//            }
 
         }
 
 
         function enemyMove() {
             enemyXpos -= enemyXspeed; // x move 
-//            enemyYpos += enemyYspeed; // y move 
-//            
+           
             if(enemyXpos + ENEMY_SIZE < 0){
                 enemyXpos = canvas.width; 
                 enemyYpos = Math.floor(Math.random() * canvas.height) - canvas.height * 0.2;
@@ -189,32 +192,15 @@
             
             if(enemyYpos +  ENEMY_SIZE > playerYpos && enemyYpos < playerYpos + PLAYER_SIZE && enemyXpos + ENEMY_SIZE > playerXpos && enemyXpos < playerXpos + PLAYER_SIZE){  // enemy collision
                 playerXpos = canvas.width/2 - PLAYER_SIZE;
-                playerYpos = 0;
+                playerYpos = 0 - PLAYER_SIZE;
             }
             
-//             if (enemyXpos + ENEMY_SIZE > canvas.width) { // right side bounce
-//                enemyXspeed *= -1;
-//                // enemyXspeed = enemyXspeed * -1;
-//
-//            }
-
-//            if (enemyXpos < 0) { // left side bounce
-//                enemyXspeed *= -1;
-//
-//            }
-
-//            if (enemyYpos + ENEMY_SIZE > canvas.height) { // top edge bounce
-//                enemyYspeed*= -1;
-//
-//            }
-//
-//            if (enemyYpos < 0) { // bottom edge bounce
-//                enemyYspeed*= -1;
-//
-//            }
-
             
         }
+        
+//       function enemiesMove() {
+//            
+//        }
 
         function colorRect(x, y, w, h, c) { //draws images
             canvasContext.fillStyle = c;
