@@ -1,7 +1,7 @@
 <!doctype html>
 
 <head>
-    <title>My Game</title>
+    <title>Flight Apparatus Joyride</title>
 </head>
 
 <body>
@@ -81,8 +81,8 @@
         
         function setup() { // setup func for all enemy objects 
 //            var enemyXposArray = Math.floor(Math.random() * ((canvas.width - ENEMY_SIZE) - 0));
-            var enemyYposArray = Math.floor(Math.random() * ((canvas.height - ENEMY_SIZE) - 10));
-            var enemyXspeedArray = Math.floor(Math.random() * (10 - 2) + 2);
+            var enemyYposArray = Math.floor(Math.random() * ((canvas.height - ENEMY_SIZE) - - ENEMY_SIZE));
+            var enemyXspeedArray = Math.floor(Math.random() * (10 - 5) + 5);
             
             var enemy = {
                 enemyXposArray: enemyXposArray,
@@ -151,6 +151,14 @@
             if (spaceKeyPress && playerYpos < canvas.height - PLAYER_SIZE) { // up move and gravity
                  playerYpos -= playerYspeed;
                 
+                if(playerYpos < 0 + PLAYER_SIZE){   // stops player going above screen 
+                    yVel = 0;
+                    playerYspeed = 0; 
+                } else {             // when not touching top screen run true 
+                    yVel = thrust;
+                    playerYspeed = 5;
+                }
+                
                 if(playerYpos > 0){
                     yVel = thrust;
                 } else {
@@ -171,9 +179,9 @@
         
         function makeEnemy(){
               const ENEMY_SIZE = 25;
-              var enemyYpos = Math.floor(Math.random() * ((canvas.height - ENEMY_SIZE) - 10));
+              var enemyYpos = Math.floor(Math.random() * ((canvas.height - ENEMY_SIZE) - ENEMY_SIZE));
               var enemyXpos = canvas.width + ENEMY_SIZE;
-              var enemyXspeed = Math.floor(Math.random() * (10 - 2) + 2);
+              var enemyXspeed = Math.floor(Math.random() * (10 - 5) + 5);
             
             var enemy = {
                 enemyXpos: enemyXpos,
