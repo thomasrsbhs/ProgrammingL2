@@ -53,14 +53,56 @@
 
         var settingUp = true;
 
+
+        //prompts
+        var userName = ''; //username text prompt, player enters their name here
+        var userPass = false; //case for false entries in name 
+        while (userPass == false) {
+            userName = prompt("What is your name? Max length 10", "barry");
+            if (userName != null && userName != '') {
+                if (userName.length <= 10) { //text limit at 10, so end screen isn't too big and the name fits in the prompt bar
+
+                    userPass = true;
+                }
+            }
+
+        }
+        // difficulty prompt
+        var difficulty = '';
+        var difficultyPass = false;
+        while (difficultyPass == false) {
+            difficulty = prompt("Select the difficulty", "easy");
+            if (difficulty == null) {
+                difficulty = '';
+            }
+            if (difficulty.toLowerCase() == 'easy' || difficulty.toLowerCase() == 'medium' || difficulty.toLowerCase() == 'hard') {
+                difficultyPass = true;
+                    
+            }
+            
+            
+        }
+
+
+
+
+
+
+
+
+
         // all functions must be run through mainloop to work
         function mainloop() {
             colorRect(0, 0, canvas.width, canvas.height, 'black'); //canvas
             colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'blue'); // player
             colorRect(enemyXpos, enemyYpos, ENEMY_SIZE, ENEMY_SIZE, 'red'); // enemy
             
-            if(settingUp){ // enemy max spawning loop 
-                for(i=0; i < totalEnemies; i++){
+            if (userName > 10){ // username character limit
+                userName == false;  
+            }
+
+            if (settingUp) { // enemy max spawning loop 
+                for (i = 0; i < totalEnemies; i++) {
                     makeEnemy();
                 }
                 setUp2();
@@ -70,30 +112,30 @@
             playerMove();
             enemyMove();
             drawEnemy();
-            
+
         } //  end of func
-        
-        function setUp2(){ // second setup for x pos
+
+        function setUp2() { // second setup for x pos
             enemyXpos = canvas.width + ENEMY_SIZE;
-            
+
         } // end of func
-        
-        
+
+
         function setup() { // setup func for all enemy objects 
-//            var enemyXposArray = Math.floor(Math.random() * ((canvas.width - ENEMY_SIZE) - 0));
-            var enemyYposArray = Math.floor(Math.random() * ((canvas.height - ENEMY_SIZE) - - ENEMY_SIZE));
+            //            var enemyXposArray = Math.floor(Math.random() * ((canvas.width - ENEMY_SIZE) - 0));
+            var enemyYposArray = Math.floor(Math.random() * ((canvas.height - ENEMY_SIZE) - -ENEMY_SIZE));
             var enemyXspeedArray = Math.floor(Math.random() * (10 - 5) + 5);
-            
+
             var enemy = {
                 enemyXposArray: enemyXposArray,
                 enemyYposArray: enemyYposArray,
                 enemyXspeedArray: enemyXspeedArray,
-                
+
             }
             enemies.push(enemy);
         } // end of func
-        
-     
+
+
 
         function keyPressed(evt) { // keydown 
             if (evt.keyCode == SPACE_KEY) {
@@ -128,12 +170,12 @@
         } // end of func
 
         var yVel = 0.3; // gravity
-        var thrust = - 5; // gravity
+        var thrust = -5; // gravity
         function playerMove() {
 
             playerYpos += yVel;
             yVel += .5;
-            
+
             if (leftKeyPress && playerXpos > 0) { //left move left edge stop 
                 playerXpos -= playerXspeed;
             }
@@ -143,90 +185,90 @@
                 if (playerXpos > canvas.width) { // right edge stop
 
                     playerYpos = 0 - PLAYER_SIZE - PLAYER_SIZE * 0.6;
-                    
+
                 }
             }
-                        
-            
+
+
             if (spaceKeyPress && playerYpos < canvas.height - PLAYER_SIZE) { // up move and gravity
-                 playerYpos -= playerYspeed;
-                
-                if(playerYpos < 0 + PLAYER_SIZE){   // stops player going above screen 
+                playerYpos -= playerYspeed;
+
+                if (playerYpos < 0 + PLAYER_SIZE) { // stops player going above screen 
                     yVel = 0;
-                    playerYspeed = 0; 
-                } else {             // when not touching top screen run true 
+                    playerYspeed = 0;
+                } else { // when not touching top screen run true 
                     yVel = thrust;
                     playerYspeed = 5;
                 }
-                
-                if(playerYpos > 0){
+
+                if (playerYpos > 0) {
                     yVel = thrust;
                 } else {
                     yVel = 0;
                 }
-            } 
-            
-            if(playerYpos > canvas.height){
-               playerYpos = 0 - PLAYER_SIZE;
-               playerXpos = canvas.width/2 - PLAYER_SIZE;
             }
 
-//            if (downKeyPress && playerYpos < canvas.height - PLAYER_SIZE) { // down move
-//                playerYpos += playerYspeed; // bottom edge stop
-//            }
+            if (playerYpos > canvas.height) {
+                playerYpos = 0 - PLAYER_SIZE;
+                playerXpos = canvas.width / 2 - PLAYER_SIZE;
+            }
+
+            //            if (downKeyPress && playerYpos < canvas.height - PLAYER_SIZE) { // down move
+            //                playerYpos += playerYspeed; // bottom edge stop
+            //            }
 
         } // end of func
-        
-        function makeEnemy(){
-              const ENEMY_SIZE = 25;
-              var enemyYpos = Math.floor(Math.random() * ((canvas.height - ENEMY_SIZE) - ENEMY_SIZE));
-              var enemyXpos = canvas.width + ENEMY_SIZE;
-              var enemyXspeed = Math.floor(Math.random() * (10 - 5) + 5);
-            
+
+        function makeEnemy() {
+            const ENEMY_SIZE = 25;
+            var enemyYpos = Math.floor(Math.random() * ((canvas.height - ENEMY_SIZE) - ENEMY_SIZE));
+            var enemyXpos = canvas.width + ENEMY_SIZE;
+            var enemyXspeed = Math.floor(Math.random() * (10 - 5) + 5);
+
             var enemy = {
                 enemyXpos: enemyXpos,
                 enemyYpos: enemyYpos,
                 ENEMY_SIZE: ENEMY_SIZE,
-                enemyXspeed: enemyXspeed  
+                enemyXspeed: enemyXspeed
             }
-            
+
             enemies.push(enemy);
-            
+
         } // end of func
-        
-        function drawEnemy(){ // draws enemies on canvas
-            enemies.forEach(function(enemy, i){
+
+        function drawEnemy() { // draws enemies on canvas
+            enemies.forEach(function(enemy, i) {
                 colorRect(enemy.enemyXpos, enemy.enemyYpos, enemy.ENEMY_SIZE, enemy.ENEMY_SIZE, 'red');
-                
+
             });
-                         
+
         }
 
 
         function enemyMove() {
-            enemies.forEach(function(enemy){
-                
-            enemy.enemyXpos -= enemy.enemyXspeed; // x move 
-           
-            if(enemy.enemyXpos + enemy.ENEMY_SIZE < 0){
-                enemy.enemyXpos = canvas.width; 
-                enemy.enemyYpos = Math.floor(Math.random() * canvas.height) - canvas.height * 0.2;
-            }
-            
-            if(enemy.enemyYpos +  enemy.ENEMY_SIZE > playerYpos && enemy.enemyYpos < playerYpos + PLAYER_SIZE && enemy.enemyXpos + enemy.ENEMY_SIZE > playerXpos && enemy.enemyXpos < playerXpos + PLAYER_SIZE){  // enemy collision
-                playerXpos = canvas.width/2 - PLAYER_SIZE;
-                playerYpos = 0 - PLAYER_SIZE;
-            }
-            
+            enemies.forEach(function(enemy) {
+
+                enemy.enemyXpos -= enemy.enemyXspeed; // x move 
+
+                if (enemy.enemyXpos + enemy.ENEMY_SIZE < 0) {
+                    enemy.enemyXpos = canvas.width;
+                    enemy.enemyYpos = Math.floor(Math.random() * canvas.height) - canvas.height * 0.2;
+                }
+
+                if (enemy.enemyYpos + enemy.ENEMY_SIZE > playerYpos && enemy.enemyYpos < playerYpos + PLAYER_SIZE && enemy.enemyXpos + enemy.ENEMY_SIZE > playerXpos && enemy.enemyXpos < playerXpos + PLAYER_SIZE) { // enemy collision
+                    playerXpos = canvas.width / 2 - PLAYER_SIZE;
+                    playerYpos = 0 - PLAYER_SIZE;
+                }
+
             });
-            
+
         } // end of func
-            
-        
-        
-//       function enemiesMove() {
-//            
-//        }
+
+
+
+        //       function enemiesMove() {
+        //            
+        //        }
 
         function colorRect(x, y, w, h, c) { //draws images
             canvasContext.fillStyle = c;
