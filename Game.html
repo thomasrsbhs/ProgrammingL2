@@ -2,10 +2,12 @@
 
 <head>
     <title>Flight Apparatus Joyride</title>
+    <h1>Dodge the missiles!</h1>
 </head>
 
 <body>
     <canvas id="gameCanvas" width="400" , height="400"></canvas>
+    <h1>Use the spacebar and arrow keys to move</h1>
     <script>
         var canvas, canvasContext;
 
@@ -49,10 +51,13 @@
         //array
         var enemies = [];
         var score = 0;
-        var death = 0;
-        var totalEnemies = 4;
+        var deaths = 0;
         var gameRun = true;
         var settingUp = true;
+
+        var totalEnemies = 4;
+        var maxSpeed = 0;
+        var minSpeed = 0;
 
 
         //prompts
@@ -73,52 +78,68 @@
         var difficulty = '';
         var difficultyPass = false;
         while (difficultyPass == false) {
-            difficulty = prompt("Select the difficulty: easy, medium, hard", "easy" );
-//            if (difficulty == null) {
-//                difficulty = '';
-//            }
+            difficulty = prompt("Select the difficulty: easy, medium, hard", "easy");
+            //                        if (difficulty == null) {
+            //                            difficulty = '';
+            //                        }
             if (difficulty.toLowerCase() == 'easy' || difficulty.toLowerCase() == 'medium' || difficulty.toLowerCase() == 'hard') {
                 difficultyPass = true; // if statement is compatable with criteria then run as true and game will run
-                    
+
             }
-            
+
         } //end of difficulty string 
 
+        if (difficulty == 'easy') {
+            maxSpeed = 5;
+            minSpeed = 3;
+
+        }
+        if (difficulty == 'medium') {
+            maxSpeed = 10;
+            minSpeed = 8;
+
+        }
+        if (difficulty == 'hard') {
+            maxSpeed = 20;
+            minSpeed = 15;
+
+        }
 
 
         // all functions must be run through mainloop to work
         function mainloop() {
-            if (gameRun) { 
-            colorRect(0, 0, canvas.width, canvas.height, 'black'); //canvas
-            colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'blue'); // player
-            colorRect(enemyXpos, enemyYpos, ENEMY_SIZE, ENEMY_SIZE, 'red'); // enemy
-            
-            if (userName > 10){ // username character limit
-                userName == false;  
-            }
+            if (gameRun) {
+                colorRect(0, 0, canvas.width, canvas.height, 'black'); //canvas
+                colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'blue'); // player
+                colorRect(enemyXpos, enemyYpos, ENEMY_SIZE, ENEMY_SIZE, 'red'); // enemy
 
-            if (settingUp) { // enemy max spawning loop 
-                for (i = 0; i < totalEnemies; i++) {
-                    makeEnemy();
+                if (userName > 10) { // username character limit
+                    userName == false;
                 }
-                setUp2();
-                settingUp = false;
-            }
-            
-                
-//            if (death >= 3){
-//                gameRun = false;
-//            }
 
-            playerMove();
-            enemyMove();
-            drawEnemy();
+                if (settingUp) { // enemy max spawning loop 
+                    for (i = 0; i < totalEnemies; i++) {
+                        makeEnemy();
+                    }
+                    setUp2();
+                    settingUp = false;
+                }
+
+
+
+
+                playerMove();
+                enemyMove();
+                drawEnemy();
+
+                // difficulty changes for easy, medium, hard
+
 
             } //if gameRun end
             else { // gameEnd screen when gameRun = true
                 colorRect(0, 0, canvas.width, canvas.height, 'black');
-                colorText(' Game over ' + userName + ' your score was ' + score, 30, canvas.height / 2, '25px ', 'white');
-                
+                colorText(' Game over ' + userName + ' your score was ' + score, canvas.width / 2, canvas.height / 2, '25px ', 'white');
+
             }
         } //  end of func
 
@@ -220,9 +241,7 @@
                 playerXpos = canvas.width / 2 - PLAYER_SIZE;
             }
 
-            //            if (downKeyPress && playerYpos < canvas.height - PLAYER_SIZE) { // down move
-            //                playerYpos += playerYspeed; // bottom edge stop
-            //            }
+
 
         } // end of func
 
@@ -230,7 +249,7 @@
             const ENEMY_SIZE = 25;
             var enemyYpos = Math.floor(Math.random() * ((canvas.height - ENEMY_SIZE) - ENEMY_SIZE));
             var enemyXpos = canvas.width + ENEMY_SIZE;
-            var enemyXspeed = Math.floor(Math.random() * (10 - 5) + 5);
+            var enemyXspeed = Math.floor(Math.random() * (maxSpeed - minSpeed) + 5);
 
             var enemy = {
                 enemyXpos: enemyXpos,
@@ -255,43 +274,27 @@
         function enemyMove() {
             enemies.forEach(function(enemy) {
 
+                var totalEnemies = '';
+
                 enemy.enemyXpos -= enemy.enemyXspeed; // x move 
 
                 if (enemy.enemyXpos + enemy.ENEMY_SIZE < 0) { //enemy reset after disappear
                     enemy.enemyXpos = canvas.width;
                     enemy.enemyYpos = Math.floor(Math.random() * canvas.height) - canvas.height * 0.2;
-                    
-                 enemy.enemyXspeed = Math.floor(Math.random() * (maxSpeed - minSpeed) + 5);
+
+                    enemy.enemyXspeed = Math.floor(Math.random() * (maxSpeed - minSpeed) + 5);
                 }
 
                 if (enemy.enemyYpos + enemy.ENEMY_SIZE > playerYpos && enemy.enemyYpos < playerYpos + PLAYER_SIZE && enemy.enemyXpos + enemy.ENEMY_SIZE > playerXpos && enemy.enemyXpos < playerXpos + PLAYER_SIZE) { // enemy collision w player x and y postitions
+                    deaths++;
+                    if (deaths >= 3) {
+                        console.log('deaths');
+                        gameRun = false;
+                    }
+
                     playerXpos = canvas.width / 2 - PLAYER_SIZE; // player startPos
                     playerYpos = 0 - PLAYER_SIZE; // player startPos
                 }
-                
-                if (enemyXpos + ENEMY_SIZE < playerXpos + PLAYER_SIZE){
-                    
-                    score++; //scoring increases
-                } // difficulty changes for easy, medium, hard
-                
-                if (difficulty == 'easy'){
-                    maxSpeed = 5;
-                    minSpeed = 3;
-                    totalEnemies = 4;
-                }
-                if (difficulty == 'medium'){
-                    maxSpeed = 8;
-                    minSpeed = 5;
-                    totalEnemies = 5;
-                }
-                if (difficulty == 'hard'){
-                    maxSpeed = 10;
-                    minSpeed = 6;
-                    totalEnemies = 6;
-                }
-                
-                
-                
 
             });
 
@@ -299,13 +302,19 @@
 
 
 
-       
+
 
         function colorRect(x, y, w, h, c) { //draws images
             canvasContext.fillStyle = c;
             canvasContext.fillRect(x, y, w, h);
 
         } // end of func
+        
+        function colorText(msg,x,y,f,c){
+            canvasContext.fillStyle = c;
+            canvasContext.font = f;
+            canvasContext.fillText(msg,x,y);
+        }
 
     </script>
 </body>
