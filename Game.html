@@ -1,11 +1,30 @@
 <!doctype html>
+<html>
 
 <head>
-    <title>Flight Apparatus Joyride</title>
-    <h1>Dodge the missiles!</h1>
+    <style>
+        body {
+            background-color: powderblue;
+            padding: 10px 10px;
+        }
+
+        h1 {
+            color: blue;
+            font-size: 30px;
+            text-align: center;
+        }
+
+        p {
+            color: red;
+        }
+
+    </style>
 </head>
 
 <body>
+    <title>Flight Apparatus Joyride</title>
+    <h1>Dodge the missiles!</h1>
+
     <canvas id="gameCanvas" width="400" , height="400"></canvas>
     <h1>Use the spacebar and arrow keys to move</h1>
     <script>
@@ -51,6 +70,7 @@
         //array
         var enemies = [];
         var score = 0;
+        var lives = 3;
         var deaths = 0;
         var gameRun = true;
         var settingUp = true;
@@ -92,16 +112,19 @@
         if (difficulty == 'easy') {
             maxSpeed = 5;
             minSpeed = 3;
+            totalEnemies = 4;
 
         }
         if (difficulty == 'medium') {
             maxSpeed = 10;
             minSpeed = 8;
+            totalEnemies = 5;
 
         }
         if (difficulty == 'hard') {
             maxSpeed = 20;
             minSpeed = 15;
+            totalEnemies = 6;
 
         }
 
@@ -112,6 +135,9 @@
                 colorRect(0, 0, canvas.width, canvas.height, 'black'); //canvas
                 colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'blue'); // player
                 colorRect(enemyXpos, enemyYpos, ENEMY_SIZE, ENEMY_SIZE, 'red'); // enemy
+                colorText('Score: ' + score, canvas.width * 0.01, 20, '15px century gothic', 'white'); //score 
+                colorText('Lives: ' + lives, canvas.width * 0.85, 20, '15px century gothic', 'white'); //lives display
+
 
                 if (userName > 10) { // username character limit
                     userName == false;
@@ -138,7 +164,7 @@
             } //if gameRun end
             else { // gameEnd screen when gameRun = true
                 colorRect(0, 0, canvas.width, canvas.height, 'black');
-                colorText(' Game over ' + userName + ' your score was ' + score, canvas.width / 2, canvas.height / 2, '25px ', 'white');
+                colorText(' Game over ' + userName + ' your score was ' + score, canvas.width * 0.175, canvas.height / 2, '20px ', 'red');
 
             }
         } //  end of func
@@ -283,11 +309,14 @@
                     enemy.enemyYpos = Math.floor(Math.random() * canvas.height) - canvas.height * 0.2;
 
                     enemy.enemyXspeed = Math.floor(Math.random() * (maxSpeed - minSpeed) + 5);
+
+                    score++;
                 }
 
                 if (enemy.enemyYpos + enemy.ENEMY_SIZE > playerYpos && enemy.enemyYpos < playerYpos + PLAYER_SIZE && enemy.enemyXpos + enemy.ENEMY_SIZE > playerXpos && enemy.enemyXpos < playerXpos + PLAYER_SIZE) { // enemy collision w player x and y postitions
                     deaths++;
-                    if (deaths >= 3) {
+                    lives--;
+                    if (deaths >= 3 && lives <= 0) {
                         console.log('deaths');
                         gameRun = false;
                     }
@@ -309,12 +338,14 @@
             canvasContext.fillRect(x, y, w, h);
 
         } // end of func
-        
-        function colorText(msg,x,y,f,c){
+
+        function colorText(msg, x, y, f, c) { // draws messages (score, end game etc.)
             canvasContext.fillStyle = c;
             canvasContext.font = f;
-            canvasContext.fillText(msg,x,y);
-        }
+            canvasContext.fillText(msg, x, y);
+        } // end of func
 
     </script>
 </body>
+
+</html>
