@@ -39,10 +39,17 @@
             text-align: center;
             width: 15%;
             font-size: 15px;
+            font-weight: bold;
             font-family: 'century gothic';
             display: block;
             margin: 10px auto;
 
+        }
+        
+       
+        
+        button:hover {
+            background-color: red;
         }
 
     </style>
@@ -54,7 +61,7 @@
 
     <canvas id="gameCanvas" width="400" , height="400"></canvas>
     <button onClick="location.reload();">Restart</button> <!-- Refresh the page -->
-    <h2>Use the spacebar and arrow keys to move</h2>
+    <h2>Use spacebar and arrow keys to move</h2>
     <script>
         var canvas, canvasContext;
 
@@ -101,14 +108,14 @@
         var deaths = 0;
         var gameRun = true;
         var settingUp = true;
-
+        //difficulty vars
         var totalEnemies = 4;
         var maxSpeed = 0;
         var minSpeed = 0;
 
 
         //prompts
-        //user prompt
+        //username prompt
         var userName = ''; //username text prompt, player enters their name here
         var userPass = false; //case for false entries in name 
         while (userPass == false) {
@@ -135,34 +142,54 @@
             }
 
         } //end of difficulty string 
+        
+        // difficulty changes for easy, medium, hard
 
-        if (difficulty == 'easy') {
+        if (difficulty == 'easy') { // default 3 lives for easy
             maxSpeed = 5;
             minSpeed = 3;
             totalEnemies = 4;
 
         }
-        if (difficulty == 'medium') {
-            maxSpeed = 10;
-            minSpeed = 8;
+        if (difficulty == 'medium') { // 4 lives on medium 
+            maxSpeed = 8;
+            minSpeed = 4;
             totalEnemies = 5;
+            lives = 4;
+            
+            if( deaths <=4){
+                gameRun = true;
+            }
+            else{
+                gameRun = false;
+            }
+                
 
         }
-        if (difficulty == 'hard') {
-            maxSpeed = 20;
-            minSpeed = 15;
+        if (difficulty == 'hard') { // 5  lives on hard due to more enemies
+            maxSpeed = 11;
+            minSpeed = 5;
             totalEnemies = 6;
+            lives = 5;
+            
+            if (deaths <= 3){
+                gameRun = true
+            }
+            else {
+                gameRun = false;
+            }
+           
 
         }
 
 
-        // all functions must be run through mainloop to work
+        
         function mainloop() {
             if (gameRun) {
-                colorRect(0, 0, canvas.width, canvas.height, 'black'); //canvas
+                colorRect(0, 0, canvas.width, canvas.height, 'black'); //canvas proportions
                 colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'gold'); // player
                 colorRect(enemyXpos, enemyYpos, ENEMY_SIZE, ENEMY_SIZE, 'red'); // enemy
-                colorText('Score: ' + score, canvas.width * 0.01, 20, '15px century gothic', 'white'); //score 
+                colorText('Score: ' + score, canvas.width * 0.01, 20, '15px century gothic,', 'white'); //score display
                 colorText('Lives: ' + lives, canvas.width * 0.85, 20, '15px century gothic', 'white'); //lives display
 
 
@@ -185,11 +212,11 @@
                 enemyMove();
                 drawEnemy();
 
-                // difficulty changes for easy, medium, hard
+                
 
 
             } //if gameRun end
-            else { // gameEnd screen when gameRun = true
+            else { // gameEnd screen when gameRun = false
                 colorRect(0, 0, canvas.width, canvas.height, 'black');
                 colorText(' Game over ' + userName + ' your score was ' + score, canvas.width * 0.125, canvas.height / 2, '17.5px century gothic', 'red');
 
@@ -204,8 +231,8 @@
 
         function setup() { // setup func for all enemy objects 
             //            var enemyXposArray = Math.floor(Math.random() * ((canvas.width - ENEMY_SIZE) - 0));
-            var enemyYposArray = Math.floor(Math.random() * ((canvas.height - ENEMY_SIZE) - 10));
-            var enemyXspeedArray = Math.floor(Math.random() * (maxSpeed - minSpeed) + 5);
+            var enemyYposArray = Math.floor(Math.random() * ((canvas.height - ENEMY_SIZE) - ENEMY_SIZE));
+            var enemyXspeedArray = Math.floor(Math.random() * (maxSpeed - minSpeed) + minSpeed);
 
             var enemy = {
                 enemyXposArray: enemyXposArray,
@@ -298,7 +325,7 @@
 
         } // end of func
 
-        function makeEnemy() {
+        function makeEnemy() {  // stores and pushes enemy vars into an array for enemyMove
             const ENEMY_SIZE = 25;
             var enemyYpos = Math.floor(Math.random() * ((canvas.height - ENEMY_SIZE) - ENEMY_SIZE));
             var enemyXpos = canvas.width + ENEMY_SIZE;
@@ -312,14 +339,9 @@
 
 
             }
-            if (enemyYpos <= 0 - ENEMY_SIZE) {
+            
 
-                makeEnemy = false;
-
-
-            }
-
-            enemies.push(enemy);
+            enemies.push(enemy); //pushes enemy vars into array for enemyMove() func
 
         } // end of func
 
@@ -332,7 +354,7 @@
         }
 
 
-        function enemyMove() {
+        function enemyMove() { // moves and spawns enemies through array 
             enemies.forEach(function(enemy) {
 
                 var totalEnemies = '';
@@ -345,16 +367,15 @@
 
                     enemy.enemyXspeed = Math.floor(Math.random() * (maxSpeed - minSpeed) + minSpeed);
 
-                    score++;
+                    score++; //score increases when enemies disappear
                 }
 
                 if (enemy.enemyYpos + enemy.ENEMY_SIZE > playerYpos && enemy.enemyYpos < playerYpos + PLAYER_SIZE && enemy.enemyXpos + enemy.ENEMY_SIZE > playerXpos && enemy.enemyXpos < playerXpos + PLAYER_SIZE) { // enemy collision w player x and y postitions
-                    deaths++;
-                    lives--;
+                    deaths++; //increases deaths on collision for gameRun
+                    lives--;  //decreases life count so player nows when they may lose
                     if (deaths >= 3 && lives <= 0) {
-                        console.log('deaths');
                         gameRun = false;
-                    }
+                    } // game end on deaths
 
                     playerXpos = canvas.width / 2 - PLAYER_SIZE; // player startPos
                     playerYpos = 0 - PLAYER_SIZE; // player startPos
@@ -368,7 +389,7 @@
 
 
 
-        function colorRect(x, y, w, h, c) { //draws images
+        function colorRect(x, y, w, h, c) { //draws images/canvas
             canvasContext.fillStyle = c;
             canvasContext.fillRect(x, y, w, h);
 
