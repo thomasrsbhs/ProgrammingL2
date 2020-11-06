@@ -9,13 +9,40 @@
         }
 
         h1 {
+            font-family: 'century gothic';
             color: blue;
             font-size: 30px;
             text-align: center;
         }
 
+        h2 {
+            font-family: 'century gothic';
+            font-size: 20px;
+            text-align: center;
+            color: blue;
+        }
+
         p {
             color: red;
+        }
+
+        canvas {
+            display: block;
+            margin: auto;
+        }
+
+        button {
+            padding: 1.5px;
+            background-color: white;
+            border: 2px solid black;
+            color: black;
+            text-align: center;
+            width: 15%;
+            font-size: 15px;
+            font-family: 'century gothic';
+            display: block;
+            margin: 10px auto;
+
         }
 
     </style>
@@ -26,7 +53,8 @@
     <h1>Dodge the missiles!</h1>
 
     <canvas id="gameCanvas" width="400" , height="400"></canvas>
-    <h1>Use the spacebar and arrow keys to move</h1>
+    <button onClick="location.reload();">Restart</button> <!-- Refresh the page -->
+    <h2>Use the spacebar and arrow keys to move</h2>
     <script>
         var canvas, canvasContext;
 
@@ -37,7 +65,7 @@
             document.addEventListener('keydown', keyPressed);
             document.addEventListener('keyup', keyReleased);
 
-            setInterval(mainloop, 1000 / 50);
+            setInterval(mainloop, 1000 / 60);
 
         }
         //player vars
@@ -46,7 +74,6 @@
         var playerYpos = 0;
         var playerXspeed = 5;
         var playerYspeed = 5;
-
 
         //enemy vars
         const ENEMY_SIZE = 25;
@@ -133,7 +160,7 @@
         function mainloop() {
             if (gameRun) {
                 colorRect(0, 0, canvas.width, canvas.height, 'black'); //canvas
-                colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'blue'); // player
+                colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'gold'); // player
                 colorRect(enemyXpos, enemyYpos, ENEMY_SIZE, ENEMY_SIZE, 'red'); // enemy
                 colorText('Score: ' + score, canvas.width * 0.01, 20, '15px century gothic', 'white'); //score 
                 colorText('Lives: ' + lives, canvas.width * 0.85, 20, '15px century gothic', 'white'); //lives display
@@ -164,7 +191,7 @@
             } //if gameRun end
             else { // gameEnd screen when gameRun = true
                 colorRect(0, 0, canvas.width, canvas.height, 'black');
-                colorText(' Game over ' + userName + ' your score was ' + score, canvas.width * 0.175, canvas.height / 2, '20px ', 'red');
+                colorText(' Game over ' + userName + ' your score was ' + score, canvas.width * 0.125, canvas.height / 2, '17.5px century gothic', 'red');
 
             }
         } //  end of func
@@ -177,7 +204,7 @@
 
         function setup() { // setup func for all enemy objects 
             //            var enemyXposArray = Math.floor(Math.random() * ((canvas.width - ENEMY_SIZE) - 0));
-            var enemyYposArray = Math.floor(Math.random() * ((canvas.height - ENEMY_SIZE) - -ENEMY_SIZE));
+            var enemyYposArray = Math.floor(Math.random() * ((canvas.height - ENEMY_SIZE) - 10));
             var enemyXspeedArray = Math.floor(Math.random() * (maxSpeed - minSpeed) + 5);
 
             var enemy = {
@@ -275,13 +302,21 @@
             const ENEMY_SIZE = 25;
             var enemyYpos = Math.floor(Math.random() * ((canvas.height - ENEMY_SIZE) - ENEMY_SIZE));
             var enemyXpos = canvas.width + ENEMY_SIZE;
-            var enemyXspeed = Math.floor(Math.random() * (maxSpeed - minSpeed) + 5);
+            var enemyXspeed = Math.floor(Math.random() * (maxSpeed - minSpeed) + minSpeed);
 
             var enemy = {
                 enemyXpos: enemyXpos,
                 enemyYpos: enemyYpos,
                 ENEMY_SIZE: ENEMY_SIZE,
                 enemyXspeed: enemyXspeed
+
+
+            }
+            if (enemyYpos <= 0 - ENEMY_SIZE) {
+
+                makeEnemy = false;
+
+
             }
 
             enemies.push(enemy);
@@ -306,9 +341,9 @@
 
                 if (enemy.enemyXpos + enemy.ENEMY_SIZE < 0) { //enemy reset after disappear
                     enemy.enemyXpos = canvas.width;
-                    enemy.enemyYpos = Math.floor(Math.random() * canvas.height) - canvas.height * 0.2;
+                    enemy.enemyYpos = Math.floor(Math.random() * (canvas.height - enemy.ENEMY_SIZE));
 
-                    enemy.enemyXspeed = Math.floor(Math.random() * (maxSpeed - minSpeed) + 5);
+                    enemy.enemyXspeed = Math.floor(Math.random() * (maxSpeed - minSpeed) + minSpeed);
 
                     score++;
                 }
@@ -346,6 +381,9 @@
         } // end of func
 
     </script>
+
+
+
 </body>
 
 </html>
