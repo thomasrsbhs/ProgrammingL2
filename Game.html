@@ -95,14 +95,15 @@
         var rightKeyPress = false;
         var upKeyPress = false;
         var downKeyPress = false;
-        //kay codes
+        //key codes
         const SPACE_KEY = 32;
         const LEFT_KEY = 37;
         const RIGHT_KEY = 39;
-        const UP_KEY = 38;
-        const DOWN_KEY = 40;
+        
         //array
         var enemies = [];
+        
+        //game 
         var score = 0;
         var lives = 3;
         var deaths = 0;
@@ -133,12 +134,15 @@
         var difficultyPass = false;
         while (difficultyPass == false) {
             difficulty = prompt("Select the difficulty: easy, medium, hard", "easy");
-            //                        if (difficulty == null) {
-            //                            difficulty = '';
-            //                        }
+                                    
             if (difficulty.toLowerCase() == 'easy' || difficulty.toLowerCase() == 'medium' || difficulty.toLowerCase() == 'hard') {
                 difficultyPass = true; // if statement is compatable with criteria then run as true and game will run
+                
 
+            }
+            
+            if (difficulty != null && difficulty != ''){
+                difficultyPass  = true;
             }
 
         } //end of difficulty string 
@@ -167,12 +171,12 @@
 
         }
         if (difficulty == 'hard') { // 5  lives on hard due to more enemies
-            maxSpeed = 11;
+            maxSpeed = 10;
             minSpeed = 5;
             totalEnemies = 6;
             lives = 5;
             
-            if (deaths <= 3){
+            if (deaths <= 4){
                 gameRun = true
             }
             else {
@@ -196,6 +200,11 @@
                 if (userName > 10) { // username character limit
                     userName == false;
                 }
+                
+                if (difficulty != 'easy', 'medium', 'hard'){
+                    difficultyPass == false;
+                    
+                } //if difficulty is entered incorrectly prompt is run false
 
                 if (settingUp) { // enemy max spawning loop 
                     for (i = 0; i < totalEnemies; i++) {
