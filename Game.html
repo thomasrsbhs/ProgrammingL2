@@ -134,8 +134,10 @@
         var difficultyPass = false;
         while (difficultyPass == false) {
             difficulty = prompt("Select the difficulty: easy, medium, hard", "easy");
+            
+            difficulty = difficulty.toLowerCase()
                                     
-            if (difficulty.toLowerCase() == 'easy' || difficulty.toLowerCase() == 'medium' || difficulty.toLowerCase() == 'hard') {
+            if (difficulty == 'easy' || difficulty == 'medium' || difficulty == 'hard') {
                 difficultyPass = true; // if statement is compatable with criteria then run as true and game will run
                 
 
