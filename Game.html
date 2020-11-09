@@ -81,6 +81,7 @@
         var playerYpos = 0;
         var playerXspeed = 5;
         var playerYspeed = 5;
+        
 
         //enemy vars
         const ENEMY_SIZE = 25;
@@ -88,6 +89,15 @@
         var enemyYpos = 200 - ENEMY_SIZE;
         var enemyXspeed = 5;
         var enemyYspeed = 5;
+        
+        //powerup vars
+        const POWER_SIZE = 25;
+        var powerXpos = 200 - POWER_SIZE;
+        var powerYpos = 200 - POWER_SIZE;
+        var powerXspeed = 5;
+        var powerYspeed = 5;
+        
+        
 
         //key presses
         var spaceKeyPress = false;
@@ -195,6 +205,7 @@
                 colorRect(0, 0, canvas.width, canvas.height, 'black'); //canvas proportions
                 colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'gold'); // player
                 colorRect(enemyXpos, enemyYpos, ENEMY_SIZE, ENEMY_SIZE, 'red'); // enemy
+                colorRect(powerXpos, powerYpos, POWER_SIZE, POWER_SIZE, 'blue'); // powerup
                 colorText('Score: ' + score, canvas.width * 0.01, 20, '15px century gothic,', 'white'); //score display
                 colorText('Lives: ' + lives, canvas.width * 0.85, 20, '15px century gothic', 'white'); //lives display
 
