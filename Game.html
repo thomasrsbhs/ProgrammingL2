@@ -57,7 +57,7 @@
 
 <body>
     <title>Flight Apparatus Joyride</title>
-    <h1>Dodge the missiles!</h1>
+    <h1>Dodge the missiles & Don't fall!</h1>
 
     <canvas id="gameCanvas" width="400" , height="400"></canvas>
     <button onClick="location.reload();">Restart</button> <!-- Refresh the page -->
@@ -77,7 +77,7 @@
         }
         //player vars
         const PLAYER_SIZE = 25;
-        var playerXpos = 200 - PLAYER_SIZE;
+        var playerXpos = 215 - PLAYER_SIZE;
         var playerYpos = 0;
         var playerXspeed = 5;
         var playerYspeed = 5;
@@ -158,9 +158,9 @@
 
         }
         if (difficulty == 'medium') { // 4 lives on medium 
-            maxSpeed = 8;
+            maxSpeed = 7;
             minSpeed = 4;
-            totalEnemies = 5;
+            totalEnemies = 4;
             lives = 4;
             
             if( deaths <=4){
@@ -173,9 +173,9 @@
 
         }
         if (difficulty == 'hard') { // 5  lives on hard due to more enemies
-            maxSpeed = 10;
+            maxSpeed = 8.5;
             minSpeed = 5;
-            totalEnemies = 6;
+            totalEnemies = 5;
             lives = 5;
             
             if (deaths <= 4){
@@ -215,6 +215,9 @@
                     setUp2();
                     settingUp = false;
                 }
+                if (deaths >= 3 && lives <= 0) {
+                        gameRun = false;
+                    }
 
 
 
@@ -265,11 +268,9 @@
             }
             if (evt.keyCode == LEFT_KEY) {
                 leftKeyPress = true;
-                //            console.log(leftKeyPress)
+                
             }
-            if (evt.keyCode == DOWN_KEY) {
-                downKeyPress = true;
-            }
+            
         } // end of func
 
         function keyReleased(evt) { // keyup
@@ -282,9 +283,7 @@
             if (evt.keyCode == LEFT_KEY) {
                 leftKeyPress = false;
             }
-            if (evt.keyCode == DOWN_KEY) {
-                downKeyPress = false;
-            }
+            
 
         } // end of func
 
@@ -294,7 +293,8 @@
 
             playerYpos += yVel;
             yVel += .5;
-
+            
+         
             if (leftKeyPress && playerXpos > 0) { //left move left edge stop 
                 playerXpos -= playerXspeed;
             }
@@ -327,10 +327,19 @@
                 }
             }
 
-            if (playerYpos > canvas.height) {
+            if (playerYpos > canvas.height - PLAYER_SIZE) { // player falling loop and running 
+                
                 playerYpos = 0 - PLAYER_SIZE;
-                playerXpos = canvas.width / 2 - PLAYER_SIZE;
+                playerXpos = canvas.width / 2 - PLAYER_SIZE; //fall loop
+                deaths += 1;
+                lives += -1;
+               
+               
+//                yVel = thrust;   // bounce and running
+//                playerYspeed = 5;
+                
             }
+          
 
 
 
@@ -378,7 +387,7 @@
 
                     enemy.enemyXspeed = Math.floor(Math.random() * (maxSpeed - minSpeed) + minSpeed);
 
-                    score++; //score increases when enemies disappear
+                    score++; //score increases when enemies disappear // dodged
                 }
 
                 if (enemy.enemyYpos + enemy.ENEMY_SIZE > playerYpos && enemy.enemyYpos < playerYpos + PLAYER_SIZE && enemy.enemyXpos + enemy.ENEMY_SIZE > playerXpos && enemy.enemyXpos < playerXpos + PLAYER_SIZE) { // enemy collision w player x and y postitions
@@ -386,7 +395,7 @@
                     lives--;  //decreases life count so player nows when they may lose
                     if (deaths >= 3 && lives <= 0) {
                         gameRun = false;
-                    } // game end on deaths
+                    } // game end on deaths for easy
 
                     playerXpos = canvas.width / 2 - PLAYER_SIZE; // player startPos
                     playerYpos = 0 - PLAYER_SIZE; // player startPos
