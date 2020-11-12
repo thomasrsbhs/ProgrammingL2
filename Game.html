@@ -1,5 +1,5 @@
 <!doctype html>
-<html> 
+<html>
 
 <head>
     <style>
@@ -57,11 +57,13 @@
 
 <body>
     <title>Flight Apparatus Joyride</title>
-    <h1>Dodge the missiles</h1>
+    <h1>Dodge the squares</h1>
 
     <canvas id="gameCanvas" width="400" , height="400"></canvas>
     <button onClick="location.reload();">Restart</button> <!-- Refresh the page -->
     <h2>Use spacebar and arrow keys to move</h2>
+    <h2>Blue squares award extra lives</h2>
+
     <script>
         var canvas, canvasContext;
 
@@ -237,8 +239,15 @@
                     setUp2();
                     settingUp = false;
                 }
+
                 if (deaths >= 3 && lives <= 0) {
                     gameRun = false;
+                }
+
+                if (lives >= 8) { // stops powerUps spawning when lives get too high
+                    powerXspeed = 0;
+                    powerXpos = canvas.width + POWER_SIZE;
+
                 }
 
 
@@ -270,6 +279,7 @@
             var enemyXspeedArray = Math.floor(Math.random() * (maxSpeed - minSpeed) + minSpeed);
 
             var powerYposArray = Math.floor(Math.random() * ((canvas.height - POWER_SIZE) - POWER_SIZE));
+            var powerXspeedArray = 6;
 
             var enemy = {
                 enemyXposArray: enemyXposArray,
@@ -278,14 +288,10 @@
 
             }
 
-            //            var power = {
-            //                powerXposArray: powerXposArray,
-            //                powerYposArray: powerYposArray,
-            //                powerXspeedArray: powerXspeedArray,
-            //            }
+
 
             enemies.push(enemy);
-            //            powers.push(power);
+
         } // end of func
 
 
@@ -392,21 +398,7 @@
 
             }
 
-            //            function makePower() { // creates & pushes out powerup squares into move array
-            //                const POWER_SIZE = 25;
-            //                var powerYpos = Math.floor(Math.random() * ((canvas.height - POWER_SIZE) - POWER_SIZE));
-            //                var powerXpos = canvas.widpowerth + POWER_SIZE;
-            //                var powerXspeed = 5;
-            //            }
 
-            //            var power = { // powerup vars for array
-            //                powerXpos: powerXpos,
-            //                powerYpos: powerYpos,
-            //                POWER_SIZE: POWER_SIZE,
-            //                powerXspeed: powerXspeed
-            //                
-            //            }
-            //            
 
 
             enemies.push(enemy); //pushes enemy vars into array for enemyMove() func
@@ -422,14 +414,7 @@
 
         }
 
-        //        function drawPower() { //draws powerups on canvas
-        //            powers.forEach(function(power, i) {
-        //                 colorRect(power.powerXpos, power.powerYpos, power.POWER_SIZE, power.POWER_SIZE, 'blue');
-        //            
-        //                           
-        //            });
-        //            
-        //        }
+
 
 
         function enemyMove() { // moves and spawns enemies through array 
@@ -468,19 +453,20 @@
 
         function powerMove() {
 
-
+            totalPowers = '';
             powerXpos -= powerXspeed;
 
             if (powerXpos + POWER_SIZE < 0) { //enemy reset after disappear
                 powerXpos = canvas.width;
                 powerYpos = Math.floor(Math.random() * (canvas.height - POWER_SIZE));
-                powerXspeed = 4;
+                powerXspeed = 6;
             }
             //                
             if (powerYpos + POWER_SIZE > playerYpos && powerYpos < playerYpos + PLAYER_SIZE && powerXpos + POWER_SIZE > playerXpos && powerXpos < playerXpos + PLAYER_SIZE) { // powerup & player collision
 
                 deaths += -1;
                 lives += 1;
+                score += 5;
                 powerXpos = canvas.width;
                 powerYpos = Math.floor(Math.random() * (canvas.height - POWER_SIZE));
 
@@ -488,19 +474,12 @@
                     gameRun = false;
                 }
 
-                
-                
-                if (lives >= 4 ){
-                    powerXspeed = 0;
-                    powerXpos = canvas.width + POWER_SIZE;
-                       
-                } 
-                else{
-                    powerMove();
-                }
 
 
-                //                     
+
+
+
+
             }
 
         } // end of func
